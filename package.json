@@ -1,0 +1,30 @@
+{
+  "name": "png01-netmon",
+  "productName": "PNG-01 NetMon",
+  "version": "0.2.0",
+  "description": "RX-09 industrial internet speed test, connection monitor and PC monitor with a reactive robot mascot",
+  "main": "main.js",
+  "author": "RX-09",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable",
+    "dist:setup": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.0.0",
+    "@fontsource/rubik-mono-one": "^5.0.0"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.0"
+  },
+  "build": {
+    "appId": "com.rx09.png01netmon",
+    "productName": "PNG-01 NetMon",
+    "directories": { "output": "dist" },
+    "files": ["main.js", "preload.js", "lib/**", "renderer/**", "assets/**", "package.json"],
+    "win": { "icon": "assets/icon.png", "target": "portable" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true }
+  }
+}

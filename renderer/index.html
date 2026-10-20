@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en" data-mood="ok">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PNG-01 // NET + SYSTEM MONITOR</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/rubik-mono-one/index.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/jetbrains-mono/400.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/jetbrains-mono/700.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ GLYPH KIT (24px grid, 2px stroke, square caps, miter joins) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9 L12 3 L22 9"/><path d="M6 13 L12 9 L18 13"/><path d="M10 17 L12 15.5 L14 17"/><rect x="11" y="19" width="2" height="2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 L20 5 V12 L12 22 L4 12 V5 Z"/><path d="M8 12 L11 15 L16 9"/></symbol>
+  <symbol id="i-router" viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="7"/><path d="M7 13 V6 M17 13 V6 M6 16.5 H9"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><path d="M7 2 H17 L22 7 V17 L17 22 H7 L2 17 V7 Z"/><path d="M2 12 H22 M12 2 V22"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2 V8 M12 16 V22 M2 12 H8 M16 12 H22"/><rect x="9" y="9" width="6" height="6"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12 H7 L9 6 L13 18 L15 12 H22"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 L22 21 H2 Z"/><path d="M12 10 V15 M12 17 V19"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7"/><rect x="3" y="14" width="18" height="7"/><path d="M7 6.5 H9 M7 17.5 H9"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3 V19 M5 12 L12 19 L19 12"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 21 V5 M5 12 L12 5 L19 12"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><path d="M8 5 H16 L19 8 V16 L16 19 H8 L5 16 V8 Z"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2 V5 M15 2 V5 M9 19 V22 M15 19 V22 M2 9 H5 M2 15 H5 M19 9 H22 M19 15 H22"/></symbol>
+  <symbol id="i-ram" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="9"/><path d="M6 10 V13 M10 10 V13 M14 10 V13 M18 10 V13 M4 16 V19 M20 16 V19"/></symbol>
+  <symbol id="i-disk" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16"/><path d="M3 14 H21"/><rect x="15" y="16" width="3" height="2"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M10 3 H14 V14 L16 16 V19 L14 21 H10 L8 19 V16 L10 14 Z"/><path d="M12 8 V17"/></symbol>
+</svg>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ TOP BAR / CONTROL PANEL ============ -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">PNG<b>-01</b></span>
+    <span class="micro brand-sub">NET + SYS MONITOR // CLASS GRM-976</span>
+  </div>
+  <nav class="nav" aria-label="Main">
+    <button class="nav-btn is-active" data-view="dash" aria-current="page"><i>01</i>[DASH]</button>
+    <button class="nav-btn" data-view="system"><i>02</i>[SYSTEM]</button>
+    <button class="nav-btn" data-view="monitor"><i>03</i>[MONITOR]</button>
+    <button class="nav-btn" data-view="servers"><i>04</i>[SERVERS]</button>
+    <button class="nav-btn" data-view="conn"><i>05</i>[LINKS]</button>
+    <button class="nav-btn" data-view="log"><i>06</i>[LOG]</button>
+    <button class="nav-btn" data-view="config"><i>07</i>[CONFIG]</button>
+  </nav>
+  <div class="top-meta">
+    <button class="sysmini" id="sysmini" data-view="system" title="Open SYSTEM view">
+      <span>CPU <b id="sm-cpu">--</b></span><span>MEM <b id="sm-mem">--</b></span><span>T <b id="sm-temp">--</b></span>
+    </button>
+    <span class="chip" id="hdr-status"><span class="lamp"></span><span id="hdr-status-text">NOMINAL</span></span>
+    <span class="micro clock" id="clock">00.00.00</span>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ 01 DASH ============ -->
+<section id="view-dash" class="view" aria-label="Dashboard">
+  <div class="dash grid">
+
+    <div class="cell mascot-cell">
+      <div class="cell-label"><span>//:001 UNIT STATUS</span><span>SA/CT_II</span></div>
+      <svg id="mascot" viewBox="0 0 240 240" role="img" aria-labelledby="mascot-t">
+        <title id="mascot-t">PNG-01 mascot</title>
+        <g class="m-antenna">
+          <line x1="120" y1="58" x2="120" y2="24" stroke="#0A0A0A" stroke-width="4"/>
+          <rect x="110" y="9" width="20" height="20" fill="#0A0A0A" transform="rotate(45 120 19)"/>
+          <rect class="m-led" x="115.5" y="14.5" width="9" height="9" fill="#F2F2F2" transform="rotate(45 120 19)"/>
+        </g>
+        <rect x="22" y="100" width="16" height="44" fill="#0A0A0A"/>
+        <rect x="202" y="100" width="16" height="44" fill="#0A0A0A"/>
+        <polygon points="52,58 188,58 206,76 206,170 188,188 52,188 34,170 34,76" fill="#F2F2F2" stroke="#0A0A0A" stroke-width="4"/>
+        <polygon points="60,80 180,80 190,90 190,150 180,160 60,160 50,150 50,90" fill="#0A0A0A"/>
+        <g class="face face-ok">
+          <g class="blink"><rect x="80" y="100" width="18" height="26" fill="#F2F2F2"/><rect x="142" y="100" width="18" height="26" fill="#F2F2F2"/></g>
+          <rect x="108" y="138" width="24" height="5" fill="#F2F2F2"/>
+        </g>
+        <g class="face face-fast">
+          <polyline points="76,121 89,104 102,121" fill="none" stroke="#FF5A1F" stroke-width="7"/>
+          <polyline points="138,121 151,104 164,121" fill="none" stroke="#FF5A1F" stroke-width="7"/>
+          <polygon points="100,134 140,134 132,147 108,147" fill="#F2F2F2"/>
+        </g>
+        <g class="face face-slow">
+          <rect x="78" y="110" width="22" height="5" fill="#F2F2F2"/><rect x="80" y="117" width="18" height="9" fill="#F2F2F2"/>
+          <rect x="140" y="110" width="22" height="5" fill="#F2F2F2"/><rect x="142" y="117" width="18" height="9" fill="#F2F2F2"/>
+          <polyline points="100,146 108,139 116,146 124,139 132,146 140,139" fill="none" stroke="#F2F2F2" stroke-width="4"/>
+        </g>
+        <g class="sweat"><polygon points="214,52 224,68 214,80 204,68" fill="#F2F2F2" stroke="#0A0A0A" stroke-width="3"/></g>
+        <g class="face face-unstable">
+          <g class="spin"><rect x="77" y="101" width="24" height="24" fill="none" stroke="#FF5A1F" stroke-width="3"/><rect x="84" y="108" width="10" height="10" fill="#FF5A1F"/></g>
+          <g class="spin rev"><rect x="139" y="101" width="24" height="24" fill="none" stroke="#FF5A1F" stroke-width="3"/><rect x="146" y="108" width="10" height="10" fill="#FF5A1F"/></g>
+          <polyline points="102,144 110,138 118,144 126,138 134,144 140,140" fill="none" stroke="#F2F2F2" stroke-width="4"/>
+        </g>
+        <g class="face face-offline">
+          <rect x="78" y="116" width="24" height="5" fill="#A0A3A0"/><rect x="138" y="116" width="24" height="5" fill="#A0A3A0"/>
+          <rect x="112" y="140" width="16" height="4" fill="#A0A3A0"/>
+        </g>
+        <g class="zzz"><text x="200" y="56" class="z z1">Z</text><text x="216" y="34" class="z z2">Z</text></g>
+        <g class="face face-testing">
+          <rect class="scan-eye" x="58" y="106" width="44" height="14" fill="#FF5A1F"/>
+          <rect x="112" y="134" width="16" height="14" fill="none" stroke="#F2F2F2" stroke-width="3"/>
+        </g>
+        <rect class="cheek" x="62" y="134" width="12" height="5" fill="#FF5A1F"/>
+        <rect class="cheek" x="166" y="134" width="12" height="5" fill="#FF5A1F"/>
+        <rect x="104" y="188" width="32" height="10" fill="#0A0A0A"/>
+        <polygon points="70,198 170,198 184,212 184,240 56,240 56,212" fill="#3A4550"/>
+        <g fill="#0A0A0A"><circle cx="76" cy="216" r="3"/><circle cx="86" cy="216" r="3"/><circle cx="96" cy="216" r="3"/><circle cx="76" cy="228" r="3"/><circle cx="86" cy="228" r="3"/><circle cx="96" cy="228" r="3"/></g>
+        <text x="140" y="232" class="m-tag">09</text>
+      </svg>
+      <div class="mood-tag"><span id="mood-label">NOMINAL</span><span class="jp" id="mood-jp">正常</span></div>
+      <p class="mood-line" id="mood-line">ALL SYSTEMS NOMINAL. STANDING BY.</p>
+      <h1 class="giant" aria-label="PNG-01">PNG-01</h1>
+    </div>
+
+    <div class="cell readout-main brk">
+      <div class="cell-label"><span>//:002 DOWNLOAD</span><span>MBPS ▼</span></div>
+      <div class="seg seg-xl" id="seg-down" role="img" aria-label="---"></div>
+      <div class="sub-row">
+        <span>BASELINE <b id="baseline">--</b></span>
+        <span>LAST <b id="last-time">--</b></span>
+        <span>NODE <b id="colo">--</b></span>
+      </div>
+      <div class="scanline" aria-hidden="true"></div>
+    </div>
+
+    <div class="cell gauge-cell">
+      <div class="cell-label"><span>//:003 LIVE GAUGE</span><span class="jp-mini">測定</span></div>
+      <div id="gauge"></div>
+      <div class="phase" id="phase" aria-live="polite">// IDLE · READY</div>
+      <div class="prog" id="prog"><i id="prog-bar"></i></div>
+      <button class="btn btn-primary" id="btn-test">[ RUN TEST ]</button>
+    </div>
+
+    <div class="minis">
+      <div class="cell mini"><div class="cell-label"><span><svg class="ico"><use href="#i-up"/></svg> UPLOAD</span><span>MBPS</span></div><div class="seg seg-md" id="seg-up" role="img"></div></div>
+      <div class="cell mini"><div class="cell-label"><span><svg class="ico"><use href="#i-pulse"/></svg> PING</span><span>MS</span></div><div class="seg seg-md" id="seg-ping" role="img"></div></div>
+      <div class="cell mini"><div class="cell-label"><span>JITTER</span><span>MS</span></div><div class="seg seg-md" id="seg-jitter" role="img"></div></div>
+      <div class="cell mini"><div class="cell-label"><span>LOSS·20</span><span>%</span></div><div class="seg seg-md" id="seg-loss" role="img"></div></div>
+    </div>
+
+    <div class="cell chart-cell">
+      <div class="cell-label"><span>//:008 LATENCY TRACE · WAN <b id="mon-target">1.1.1.1</b> / GATEWAY</span>
+        <span class="legend"><i class="lg lg-ink"></i>WAN <i class="lg lg-gray"></i>GW <i class="lg lg-acc"></i>DROP</span></div>
+      <div class="chart-box"><canvas id="chart-dash"></canvas></div>
+    </div>
+
+    <div class="cell link-cell">
+      <div class="cell-label"><span>//:009 LINK STATUS</span><span>通信</span></div>
+      <dl class="kv">
+        <dt><svg class="ico"><use href="#i-wifi"/></svg>WIFI</dt><dd><span id="k-wifi">--</span><span class="meter" id="wifi-meter" aria-hidden="true"></span></dd>
+        <dt><svg class="ico"><use href="#i-shield"/></svg>VPN</dt><dd id="k-vpn">--</dd>
+        <dt><svg class="ico"><use href="#i-router"/></svg>GATEWAY</dt><dd id="k-gw">--</dd>
+        <dt><svg class="ico"><use href="#i-globe"/></svg>ISP</dt><dd id="k-isp">--</dd>
+        <dt><svg class="ico"><use href="#i-pin"/></svg>PUBLIC IP</dt><dd id="k-ip">--</dd>
+        <dt><svg class="ico"><use href="#i-warn"/></svg>DIAG</dt><dd id="k-diag">NO FAULTS</dd>
+      </dl>
+      <div class="traffic">
+        <div class="tr-row"><span>RX ▼</span><span class="bar20" id="rx-bar"></span><b id="rx-val">--</b></div>
+        <div class="tr-row"><span>TX ▲</span><span class="bar20" id="tx-bar"></span><b id="tx-val">--</b></div>
+      </div>
+    </div>
+
+    <div class="hazard-row">
+      <div class="hazard" aria-hidden="true"></div>
+      <div class="hz-text"><svg class="ico"><use href="#i-warn"/></svg> STAND CLEAR FROM THIS AREA DURING TEST <span class="jp">警告 · 危険</span></div>
+      <div class="hz-meta micro">BRAND: RX-09 / MODEL: PNG-01 · //:009</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 SYSTEM ============ -->
+<section id="view-system" class="view" hidden aria-labelledby="h-sys">
+  <div class="view-head">
+    <h2 id="h-sys" class="vh">SYSTEM<br>LOAD</h2>
+    <div class="vh-meta">
+      <span class="micro">//:070 HOST <b id="sys-host">--</b></span>
+      <span class="micro" id="sys-cpu-model">--</span>
+      <span class="micro">CORES <b id="sys-cores">--</b> · RAM <b id="sys-ram">--</b> · UPTIME <b id="sys-uptime">--</b></span>
+      <span class="micro jp">システム監視 · СИСТЕМНЫЙ МОНИТОР</span>
+    </div>
+  </div>
+  <div class="grid sysgrid">
+    <div class="cell sysbig sb-cpu primary" id="sb-cpu">
+      <div class="cell-label"><span><svg class="ico"><use href="#i-chip"/></svg> //:071 CPU LOAD</span><span>%</span></div>
+      <div class="seg seg-lg" id="seg-cpu" role="img"></div>
+      <span class="bar20" id="bar-cpu"></span>
+      <div class="sb-sub"><span>PEAK 60S <b id="cpu-peak">--</b></span><span>ALERT ≥ <b id="cpu-th">--</b></span></div>
+    </div>
+    <div class="cell sysbig sb-mem" id="sb-mem">
+      <div class="cell-label"><span><svg class="ico"><use href="#i-ram"/></svg> //:072 MEMORY</span><span>%</span></div>
+      <div class="seg seg-lg" id="seg-mem" role="img"></div>
+      <span class="bar20" id="bar-mem"></span>
+      <div class="sb-sub"><span>USED <b id="mem-used">--</b></span><span>FREE <b id="mem-free">--</b></span></div>
+    </div>
+    <div class="cell sysbig sb-disk" id="sb-disk">
+      <div class="cell-label"><span><svg class="ico"><use href="#i-disk"/></svg> //:073 DISK ACTIVE</span><span>%</span></div>
+      <div class="seg seg-lg" id="seg-disk" role="img"></div>
+      <span class="bar20" id="bar-disk"></span>
+      <div class="sb-sub"><span>R <b id="disk-rd">--</b></span><span>W <b id="disk-wr">--</b></span></div>
+    </div>
+    <div class="cell sysbig sb-temp" id="sb-temp">
+      <div class="cell-label"><span><svg class="ico"><use href="#i-temp"/></svg> //:074 TEMPERATURE</span><span>°C</span></div>
+      <div class="seg seg-lg" id="seg-temp" role="img"></div>
+      <span class="bar20" id="bar-temp"></span>
+      <div class="sb-sub"><span id="temp-name">--</span><span>SRC <b id="temp-src">--</b></span></div>
+    </div>
+
+    <div class="cell sys-chart">
+      <div class="cell-label"><span>//:075 LOAD TRACE · LAST 150 SAMPLES</span>
+        <span class="legend"><i class="lg lg-ink"></i>CPU <i class="lg lg-gray"></i>MEM <i class="lg lg-dash"></i>DISK <i class="lg lg-acc"></i>TEMP °C</span></div>
+      <div class="chart-box"><canvas id="chart-sys"></canvas></div>
+    </div>
+
+    <div class="cell sys-cores">
+      <div class="cell-label"><span>//:076 PER-CORE LOAD</span><span id="core-count">--</span></div>
+      <div class="cores" id="cores"></div>
+    </div>
+
+    <div class="cell sys-vols">
+      <div class="cell-label"><span>//:077 VOLUMES</span><span>FREE ALERT &lt; <b id="vol-th">--</b>%</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th></th><th>DRIVE</th><th>LABEL</th><th>USAGE</th><th class="num">USED</th><th class="num">FREE</th><th class="num">SIZE</th></tr></thead>
+        <tbody id="vol-body"></tbody>
+      </table></div>
+    </div>
+
+    <div class="cell sys-pdisk">
+      <div class="cell-label"><span>//:078 PHYSICAL DISKS</span><span>REMOVABLE MODULE</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>DISK</th><th>ACTIVE</th><th class="num">READ</th><th class="num">WRITE</th><th class="num">QUEUE</th></tr></thead>
+        <tbody id="pdisk-body"></tbody>
+      </table></div>
+    </div>
+
+    <div class="cell sys-temps">
+      <div class="cell-label"><span>//:079 THERMAL SENSORS</span><span>温度 · ALERT ≥ <b id="temp-th">--</b>°C</span></div>
+      <div class="sensors" id="sensors"></div>
+      <div class="sys-note" id="temp-note" hidden></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 MONITOR ============ -->
+<section id="view-monitor" class="view" hidden aria-labelledby="h-mon">
+  <div class="view-head">
+    <h2 id="h-mon" class="vh">LIVE<br>MONITOR</h2>
+    <div class="vh-meta">
+      <span class="micro">//:020 TARGET <b id="mon-target2">1.1.1.1</b></span>
+      <span class="micro">PROBE <b id="mon-method">ICMP</b> · EVERY <b id="mon-int">5S</b></span>
+      <span class="micro jp">通信監視 · СЕТЕВОЙ МОНИТОР</span>
+    </div>
+  </div>
+  <div class="grid vgrid">
+    <div class="statgrid" id="mon-stats"></div>
+    <div class="cell">
+      <div class="cell-label"><span>//:021 LATENCY TRACE · LAST 720 SAMPLES</span>
+        <span class="legend"><i class="lg lg-ink"></i>WAN <i class="lg lg-gray"></i>GW <i class="lg lg-acc"></i>DROP</span></div>
+      <canvas id="chart-mon" class="chart chart-tall"></canvas>
+    </div>
+    <div class="cell">
+      <div class="cell-label"><span>//:022 OUTAGE TIMELINE · 24H</span><span>移動 &gt;&gt;&gt; NOW</span></div>
+      <canvas id="timeline" class="chart chart-strip"></canvas>
+    </div>
+    <div class="cell">
+      <div class="cell-label"><span>//:023 OUTAGE LOG</span><span id="ev-count">0 EVENTS</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>START</th><th>END</th><th class="num">DURATION</th><th>TARGET</th></tr></thead>
+        <tbody id="events-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 SERVERS ============ -->
+<section id="view-servers" class="view" hidden aria-labelledby="h-srv">
+  <div class="view-head">
+    <h2 id="h-srv" class="vh">SERVER<br>WATCH</h2>
+    <div class="vh-meta">
+      <span class="micro">//:030 POLL EVERY <b>30S</b></span>
+      <span class="micro">ICMP OR TCP PORT PROBE</span>
+      <span class="micro jp">サーバー監視</span>
+    </div>
+  </div>
+  <div class="grid vgrid">
+    <form class="cell srv-form" id="srv-form" autocomplete="off">
+      <div class="cell-label"><span>//:031 REGISTER NODE</span><span>[ + ]</span></div>
+      <div class="form-row">
+        <label>NAME<input id="srv-name" maxlength="24" placeholder="DE SORTER"></label>
+        <label>HOST / IP<input id="srv-host" required maxlength="253" placeholder="10.193.20.153"></label>
+        <label>PORT <small>(BLANK = ICMP)</small><input id="srv-port" type="number" min="1" max="65535" placeholder="80"></label>
+        <button class="btn btn-primary" type="submit">[ ADD NODE ]</button>
+        <button class="btn" type="button" id="btn-srv-check">[ CHECK NOW ]</button>
+      </div>
+      <p class="note"><svg class="ico"><use href="#i-warn"/></svg> CORPORATE FIREWALLS OFTEN BLOCK ICMP. SET A PORT (80 / 443 / 22 / 3306) FOR A TCP PROBE. INTERNAL IPS NEED THE VPN.</p>
+    </form>
+    <div class="cell">
+      <div class="cell-label"><span>//:032 NODE TABLE</span><span id="srv-count">0 NODES</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th></th><th>NAME</th><th>HOST</th><th>METHOD</th><th class="num">LAST MS</th><th class="num">UPTIME</th><th>TRACE</th><th></th></tr></thead>
+        <tbody id="srv-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 LINKS (CONNECTIONS) ============ -->
+<section id="view-conn" class="view" hidden aria-labelledby="h-conn">
+  <div class="view-head">
+    <h2 id="h-conn" class="vh">ACTIVE<br>LINKS</h2>
+    <div class="vh-meta">
+      <span class="micro">//:040 TCP · ESTABLISHED</span>
+      <span class="micro" id="conn-status">NOT SCANNED</span>
+      <span class="micro jp">接続 · СОЕДИНЕНИЯ</span>
+    </div>
+  </div>
+  <div class="grid vgrid">
+    <div class="cell conn-tools">
+      <button class="btn btn-primary" id="btn-scan">[ SCAN ]</button>
+      <label class="grow">FILTER<input id="conn-filter" placeholder="PROCESS / IP / PORT"></label>
+    </div>
+    <div class="cell">
+      <div class="cell-label"><span>//:041 TOP PROCESSES BY CONNECTION COUNT</span><span>REMOVABLE MODULE</span></div>
+      <div id="conn-bars" class="hbars"></div>
+    </div>
+    <div class="cell">
+      <div class="cell-label"><span>//:042 CONNECTION TABLE</span><span id="conn-count">0</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>PROCESS</th><th class="num">PID</th><th>LOCAL</th><th>REMOTE</th></tr></thead>
+        <tbody id="conn-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 LOG ============ -->
+<section id="view-log" class="view" hidden aria-labelledby="h-log">
+  <div class="view-head">
+    <h2 id="h-log" class="vh">TEST<br>LOG</h2>
+    <div class="vh-meta">
+      <span class="micro">//:050 RECORDS <b id="log-count">0</b></span>
+      <span class="micro">BASELINE <b id="log-base">--</b> MBPS</span>
+      <span class="micro jp">記録</span>
+    </div>
+  </div>
+  <div class="grid vgrid">
+    <div class="cell">
+      <div class="cell-label"><span>//:051 LAST 40 TESTS</span>
+        <span class="legend"><i class="lg lg-ink"></i>DOWN <i class="lg lg-gray"></i>UP <i class="lg lg-acc"></i>BASELINE</span></div>
+      <canvas id="chart-log" class="chart chart-tall"></canvas>
+    </div>
+    <div class="cell conn-tools">
+      <button class="btn btn-primary" id="btn-export">[ EXPORT CSV ]</button>
+      <button class="btn" id="btn-clear">[ CLEAR LOG ]</button>
+    </div>
+    <div class="cell">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>TIME</th><th class="num">DOWN</th><th class="num">UP</th><th class="num">PING</th><th class="num">JITTER</th><th>ISP</th><th>VPN</th><th>SSID</th><th>SRC</th></tr></thead>
+        <tbody id="log-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 CONFIG ============ -->
+<section id="view-config" class="view" hidden aria-labelledby="h-cfg">
+  <div class="view-head">
+    <h2 id="h-cfg" class="vh">CONFIG<br>PANEL</h2>
+    <div class="vh-meta">
+      <span class="micro">//:060 SECURITY PROTOCOL ACTIVE</span>
+      <span class="micro">VERSION <b id="cfg-version">0.2.0</b></span>
+      <span class="micro jp">設定</span>
+    </div>
+  </div>
+  <form class="grid vgrid" id="cfg-form">
+    <div class="cell">
+      <div class="cell-label"><span>//:061 NETWORK</span><span>通信</span></div>
+      <div class="cfg-grid">
+        <label>MONITOR TARGET<input name="monitorTarget" maxlength="253"></label>
+        <label>PROBE PORT <small>(BLANK = ICMP)</small><input name="monitorPort" type="number" min="1" max="65535" placeholder="443"></label>
+        <label>INTERVAL (S)<input name="monitorIntervalSec" type="number" min="2" max="60"></label>
+        <label>AUTO SPEED TEST
+          <select name="autoTestMin"><option value="0">OFF</option><option value="15">EVERY 15 MIN</option><option value="30">EVERY 30 MIN</option><option value="60">EVERY 60 MIN</option><option value="120">EVERY 120 MIN</option></select>
+        </label>
+        <label>TEST DURATION (S)<input name="testDurationSec" type="number" min="5" max="20"></label>
+        <label>SLOW ALERT BELOW (% OF BASELINE)<input name="slowPct" type="number" min="5" max="90"></label>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-label"><span>//:062 PC ALERT THRESHOLDS</span><span>警告</span></div>
+      <div class="cfg-grid">
+        <label>CPU ALERT % <small>(SUSTAINED 60S)</small><input name="cpuAlertPct" type="number" min="50" max="100"></label>
+        <label>MEMORY ALERT % <small>(SUSTAINED 60S)</small><input name="memAlertPct" type="number" min="50" max="100"></label>
+        <label>TEMP ALERT °C <small>(SUSTAINED 30S)</small><input name="tempAlertC" type="number" min="40" max="110"></label>
+        <label>DISK FREE ALERT BELOW %<input name="diskFreeAlertPct" type="number" min="1" max="50"></label>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-label"><span>//:063 BEHAVIOUR</span><span>[X]</span></div>
+      <div class="cfg-grid">
+        <label class="check"><input type="checkbox" name="alerts"><span class="box" aria-hidden="true"></span>DESKTOP ALERTS</label>
+        <label class="check"><input type="checkbox" name="closeToTray"><span class="box" aria-hidden="true"></span>CLOSE TO TRAY (KEEP MONITORING)</label>
+      </div>
+    </div>
+    <div class="cell conn-tools">
+      <button class="btn btn-primary" type="submit">[ SAVE CONFIG ]</button>
+      <button class="btn" type="button" id="btn-open-data">[ OPEN DATA FOLDER ]</button>
+      <span class="micro" id="cfg-data">--</span>
+    </div>
+  </form>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+  <div class="credit">
+    <span>© 2026 RX-09 SYSTEMS. BUILT TO WIN, BORN TO PING.</span>
+    <span>A RX-09 ORIGINAL UNIT · 想像力を動力源 · ®</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="assertive" hidden>
+  <div class="toast-h"><svg class="ico"><use href="#i-warn"/></svg> CAUTION!</div>
+  <div id="toast-msg">--</div>
+</div>
+
+<script src="seg.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
